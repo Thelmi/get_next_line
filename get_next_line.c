@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 20:32:22 by thelmy            #+#    #+#             */
-/*   Updated: 2024/02/28 10:02:32 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/02/28 18:38:02 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,32 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-# define BUFFER 11
+// #ifndef BUFFER 
+# define BUFFER 15
+// #endif
 
-char	*ft_strjoin(char const *s1, char const *s2)
+
+char	*ft_memmove(char *dst, char *src, size_t len)
+{
+	while(len--)
+		src[len] = dst[len];
+	return (dst);
+}
+
+size_t	ft_strlen(char *str)
+{
+	size_t i;
+	
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+		return (i);
+}
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
@@ -40,32 +63,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-size_t	ft_strlen(char *str)
-{
-	size_t i;
-	
-	if (!str)
-		return (0);
-	i = 0;
-	while (str)
-	{
-		i++;
-	}
-		return (i);
-}
-char	*ft_strncpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
+// char	*ft_strncpy(char *dst, const char *src, size_t dstsize)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (src[i] && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
-}
+// 	i = 0;
+// 	while (src[i] && i < dstsize - 1)
+// 	{
+// 		dst[i] = src[i];
+// 		i++;
+// 	}
+// 	dst[i] = '\0';
+// 	return (dst);
+// }
 char *get_next_line(int fd)
 {
 	static char	*buffer = NULL;
@@ -90,26 +100,37 @@ char *get_next_line(int fd)
 			i++;
 		}
 		if (buffer[i] == '\n')
-			str[i] = '\n';
-		return (str);
+			str[i++] = '\n';
 	}
-	if (buffer)
-	{
-		tmp = malloc(sizeof(char) * ft_strlen(buffer) + 1);
-		while (buffer[i])
-		{
-			tmp[i] = buffer[i];
-			i++;
-		}
-		buffer[0] = '\0';
-		read(fd, buffer, BUFFER);
-		ft_strjoin(tmp,buffer);
-		
-	}
-	return (NULL);
+	printf("buffer: %s", buffer);
+	printf("\nTest: %s\n", buffer + i);
+	// if (buffer && buffer[0] != '\n')
+	// {
+	// 	ft_memmove(buffer, buffer + i, );
+	// }
+	// printf("\nbuffer: %s", buffer);
+	// if (buffer && buffer[0] != '\0')
+	// {
+	// 	tmp = malloc(sizeof(char) * ft_strlen(buffer) + 1);
+	// 	if(!tmp)
+	// 		return(NULL);
+	// 	while (buffer[i] )
+	// 	{
+	// 		tmp[i] = buffer[i];
+	// 		i++;
+	// 	}
+	// 	buffer[0] = '\0';
+	// 	i = 0;
+	// 	read(fd, buffer, BUFFER);
+	// 	// str = ft_strjoin(tmp,buffer);
+	// 	while (buffer[i] != '\n')
+	// 		i++;
+	// 	ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer) + 1);
+	// }
+	return (str);
 }
 int main()
 {
 	int fd = open("text.txt", O_RDWR | O_CREAT, 777);
-	printf("%s\n",get_next_line(fd));
+	printf("%s",get_next_line(fd));
 }
