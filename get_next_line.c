@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 20:32:22 by thelmy            #+#    #+#             */
-/*   Updated: 2024/03/02 16:02:41 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/03/02 20:18:15 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-// char	*ft_strncpy(char *dst, const char *src, size_t dstsize)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (src[i] && i < dstsize - 1)
-// 	{
-// 		dst[i] = src[i];
-// 		i++;
-// 	}
-// 	dst[i] = '\0';
-// 	return (dst);
-// }
 char *get_next_line(int fd)
 {
 	static char	*buffer = NULL;
@@ -115,6 +102,24 @@ char *get_next_line(int fd)
 		buffer = malloc(sizeof(char ) * (BUFFER + 1));
 	if (!buffer)
 		return (NULL);
+	if (buffer && buffer[0] != '\0')
+	{
+		tmp = (char *)malloc(sizeof(char) * ft_strlen(buffer) + 1);
+		if(!tmp)
+			return(NULL);
+		while (buffer[i] )
+		{
+			tmp[i] = buffer[i];
+			i++;
+		}
+		buffer[0] = '\0';
+		i = 0;
+		read(fd, buffer, BUFFER);
+		str = ft_strjoin(tmp,buffer);
+		while (buffer[i] != '\n')
+			i++;
+		ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
+	}
 	i = 0;
 	if (buffer[0] == '\0')
 	{
@@ -137,30 +142,15 @@ char *get_next_line(int fd)
 			i++;
 		ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
 	}
-	
-// 	if (buffer && buffer[0] != '\0')
-// 	{
-// 		tmp = (char *)malloc(sizeof(char) * ft_strlen(buffer) + 1);
-// 		if(!tmp)
-// 			return(NULL);
-// 		while (buffer[i] )
-// 		{
-// 			tmp[i] = buffer[i];
-// 			i++;
-// 		}
-// 		buffer[0] = '\0';
-// 		i = 0;
-// 		read(fd, buffer, BUFFER);
-// 		str = ft_strjoin(tmp,buffer);
-// 		while (buffer[i] != '\n')
-// 			i++;
-// 		ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
-// 	}
  	return (str);
 }
 int main()
 {
 	int fd = open("text.txt", O_RDWR | O_CREAT, 777);
 	printf("%s",get_next_line(fd));
+	printf("%s",get_next_line(fd));
+	printf("%s",get_next_line(fd));
 }
+	
+
 
