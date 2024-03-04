@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 20:32:22 by thelmy            #+#    #+#             */
-/*   Updated: 2024/03/02 20:18:15 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/03/04 21:05:24 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 // #ifndef BUFFER 
-# define BUFFER 16
+# define BUFFER 2
 // #endif
 
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if(!s)
+		return NULL;
+	while (s[i] || (unsigned char)c == '\0')
+	{
+		if ((unsigned char)c == (unsigned char)s[i])
+			return ((char *)(s + i));
+		i++;
+	}
+	return (NULL);
+}
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	size_t		i;
@@ -88,6 +103,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (s2[j] == '\n')
 		str[i++] = '\n';
 	str[i] = '\0';
+	if(s1)
+		free(s1);
 	return (str);
 }
 
@@ -95,62 +112,53 @@ char *get_next_line(int fd)
 {
 	static char	*buffer = NULL;
 	char		*str;
-	char		*tmp;
 	int			i;
+	int 		bytes;
 	
+	i = 0;
+	bytes = 1;
 	if (!buffer)
 		buffer = malloc(sizeof(char ) * (BUFFER + 1));
 	if (!buffer)
 		return (NULL);
-	if (buffer && buffer[0] != '\0')
+	str = NULL;
+	while (!ft_strchr(str , '\n') && bytes > 0)
 	{
-		tmp = (char *)malloc(sizeof(char) * ft_strlen(buffer) + 1);
-		if(!tmp)
-			return(NULL);
-		while (buffer[i] )
+		if (buffer && buffer[0] != '\0')
 		{
-			tmp[i] = buffer[i];
+			str = ft_strjoin(str,buffer);
+		while (buffer[i] && buffer[i] != '\n')
 			i++;
+			if (buffer[i] == '\n')
+				ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
+			else
+				buffer[0] = '\0';
 		}
-		buffer[0] = '\0';
-		i = 0;
-		read(fd, buffer, BUFFER);
-		str = ft_strjoin(tmp,buffer);
-		while (buffer[i] != '\n')
-			i++;
-		ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
-	}
-	i = 0;
-	if (buffer[0] == '\0')
-	{
-		str = malloc(sizeof(char) * (BUFFER + 1));
-		if (!str)
-			return (NULL);
-		read(fd, buffer, BUFFER);
-		buffer[BUFFER] = '\0';
-
-		while (buffer[i] != '\n')
+		else if (buffer[0] == '\0')
 		{
-			str[i] = buffer[i];
-			i++;
-		}
-		if (buffer[i] == '\n')
-			str[i++] = '\n';
-		str[i] = '\0';
-		i = 0;
-		while (buffer[i] != '\n')
-			i++;
-		ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
+			i = 0;
+			bytes = read(fd, buffer, BUFFER);
+			if (bytes == -1)
+			{
+				free(buffer);
+				if (!str)
+					free(str);
+				return NULL;
+			}
+			buffer[bytes] = '\0';
+			str = ft_strjoin(str,buffer);
+			i = 0;
+			while (buffer[i] && buffer[i] != '\n')
+				i++;
+			if (buffer[i] == '\n')
+				ft_memmove(buffer,buffer + i + 1, ft_strlen(buffer + i + 1) + 1);
+			else
+				buffer[0] = '\0';
 	}
+}
  	return (str);
 }
-int main()
-{
-	int fd = open("text.txt", O_RDWR | O_CREAT, 777);
-	printf("%s",get_next_line(fd));
-	printf("%s",get_next_line(fd));
-	printf("%s",get_next_line(fd));
-}
+
 	
 
 
