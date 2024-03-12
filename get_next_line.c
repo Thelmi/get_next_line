@@ -110,17 +110,13 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char *get_next_line(int fd)
 {
-	static char	*buffer = NULL;
+	static char	buffer[BUFFER + 1];
 	char		*str;
 	int			i;
 	int 		bytes;
-	
+
 	i = 0;
 	bytes = 1;
-	if (!buffer)
-		buffer = malloc(sizeof(char ) * (BUFFER + 1));
-	if (!buffer)
-		return (NULL);
 	str = NULL;
 	while (!ft_strchr(str , '\n') && bytes > 0)
 	{
@@ -140,11 +136,13 @@ char *get_next_line(int fd)
 			bytes = read(fd, buffer, BUFFER);
 			if (bytes == -1)
 			{
-				free(buffer);
-				if (!str)
+				// free(buffer);
+				if (str)
 					free(str);
 				return NULL;
 			}
+			if (bytes == 0)
+				return (str);
 			buffer[bytes] = '\0';
 			str = ft_strjoin(str,buffer);
 			i = 0;
@@ -159,6 +157,32 @@ char *get_next_line(int fd)
  	return (str);
 }
 
-	
+int main()
+{
+	char *s = NULL;
+	int fd = open("text.txt", O_RDONLY);
+	// while (1)
+	// {
+	// 	s = get_next_line(fd);
+	// 	if (s)
+	// 	{
+	// 		printf("%s", s);
+	// 		free(s);
+	// 	}
+	// 	else if (!s)
+	// 		break ;
+	// }
+	int i = 0;
+	while (i < 15)
+	{
+		s = get_next_line(fd);
+		printf("%s", s);
+		if (s)
+			free(s);
+		i++;
+	}
+	// s = get_next_line(fd);
+	// printf("%p", s);
+}	
 
 
