@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:23:33 by thelmy            #+#    #+#             */
-/*   Updated: 2024/03/13 21:33:12 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/03/14 13:53:55 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE 
 #  define BUFFER_SIZE 2
+# endif
+
+# ifndef OPEN_MAX 
+#  define OPEN_MAX 10240
 # endif
 
 # include <fcntl.h>
