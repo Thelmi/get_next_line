@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 20:32:22 by thelmy            #+#    #+#             */
-/*   Updated: 2024/03/14 13:46:59 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/03/15 16:20:24 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ static void	get_and_update(char *buffer, char **str)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[BUFFER_SIZE + 1u];
 	char		*str;
 	int			bytes;
 
 	bytes = 1;
 	str = NULL;
-	if (fd < 0 || BUFFER_SIZE < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	while (!ft_strchr(str, '\n') && bytes > 0)
 	{
@@ -51,43 +51,3 @@ char	*get_next_line(int fd)
 	}
 	return (str);
 }
-
-// int main()
-// {
-// 	char *s = NULL;
-// 	int fd = open("text.txt", O_RDONLY);
-// 	// while (1)
-// 	// {
-// 	// 	s = get_next_line(fd);
-// 	// 	if (s)
-// 	// 	{
-// 	// 		printf("%s", s);
-// 	// 		free(s);
-// 	// 	}
-// 	// 	else if (!s)
-// 	// 		break ;
-// 	// }
-// 	int i = 0;
-// 	while (i < 15)
-// 	{
-// 		s = get_next_line(fd);
-// 		printf("%s", s);
-// 		if (s)
-// 			free(s);
-// 		i++;
-// 	}
-// 	// s = get_next_line(fd);
-// 	// printf("%p", s);
-// }
-
-// int main(int ac, char **av)
-// {
-// 	int fd = open(av[1], O_RDONLY);
-// 	char *str;
-// 	while ((str = get_next_line(fd)))
-// 	{
-// 		printf("%s", str);
-// 		free(str);
-// 	}
-// 	(void)ac;
-// }
